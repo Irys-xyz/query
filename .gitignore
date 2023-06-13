@@ -1,0 +1,13 @@
+node_modules
+.devcontainer
+.env
+wallet.json
+.vscode
+build
+temp
+test.ts
+yarn.lock
+yarn-error.log
+.idea
+/coverage
+*.tgz
