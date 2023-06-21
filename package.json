@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Irys query package",
   "repository": "https://github.com/Bundlr-Network/query",
-  "author": "JesseTheRobot <jesse.cruz.wright@gmail.com>",
+  "author": "JesseTheRobot <jesse@bundlr.network>",
   "license": "MIT",
   "main": "./build/cjs/index.js",
   "browser": "./build/esm/index.js",
