@@ -1,11 +1,13 @@
 export type GQLResponse<T> = {
-  data: Record<
-    string,
-    {
-      edges: T;
-      pageInfo: PageInfo;
-    }
-  >;
+  data:
+    | Record<
+        string,
+        {
+          edges: T;
+          pageInfo: PageInfo;
+        }
+      >
+    | T;
 };
 
 export type PageInfo = {
@@ -13,9 +15,27 @@ export type PageInfo = {
   hasNextPage: boolean;
 };
 
-export type QueryInfo = { query: Record<string, any>; enumValues: string[]; vars: Record<string, any> };
+/** Object describing metadata about a query, including the type, enum values, vars, and other info */
+export type QueryInfo = {
+  /** Name of the query (GQL query name) */
+  name: string;
+  /** Minimal object representing the return shape of the query */
+  query: Record<string, any>;
+  /** Names of all enumeration values - these need special formatting */
+  enumValues?: string[];
+  /** variables to supply the query */
+  vars: Record<string, any>;
+  /** Tell the GQL compiler to remap the variable with name <key> to variable with name <value> */
+  remapVars?: Record<string, string>;
+  paging?: {
+    /** name of the hasNextPage pageInfo var */
+    hasNextPage: string;
+    /** name of the cursor edge var*/
+    cursor: string;
+  };
+};
 
-export type SearchOpts = { skipVariableSetters?: boolean; query?: QueryInfo };
+export type SearchOpts = { skipVariableSetters?: boolean; query?: QueryInfo | false };
 
 // forces full type resolution, aka "intellisense pretty printing"
 export type Pretty<T> = T extends (...args: any[]) => any ? T : T extends abstract new (...args: any[]) => any ? T : { [K in keyof T]: T[K] };
@@ -38,13 +58,13 @@ export type ReturnFields<F extends S, S> =
 // maps fields into structural optional booleans for user selection
 export type Field<T extends Record<string, any>> = {
   [K in keyof T]?: T[K] extends (infer U extends object)[] // note the optionality `?`
-    ? Field<U> // flatten to array element tyoe
+    ? Field<U> // flatten to array element type
     : T[K] extends object
     ? Field<T[K]>
     : boolean;
 };
 
-// contructs function signatures from a type
+// constructs function signatures from a type for dynamic builder methods
 export type BuilderMethods<T extends Record<string, any>, R = any> = {
   [K in keyof T]-?: T[K] extends object ? BuilderMethods<T[K]> : (field: T[K]) => R & BuilderMethods<T, R>;
 };

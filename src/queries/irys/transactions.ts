@@ -1,3 +1,5 @@
+import type { QueryInfo } from "src/types";
+
 // derive type from minimal object, use this object to validate structure in code.
 export const transactions = {
   id: "",
@@ -14,21 +16,14 @@ export const transactions = {
   timestamp: 0,
 };
 
-export type Transaction = typeof transactions;
+export type IrysTransactions = typeof transactions;
 
-// list of all variables, with defaults.
-export const transactionVars = {
-  ids: undefined,
-  after: undefined,
-  currency: undefined,
-  owners: undefined,
+// default variables
+export const transactionVars: IrysTransactionVars = {
   limit: 100,
-  order: undefined,
-  hasTags: undefined,
-  tags: undefined,
 };
 
-export type TransactionVars = {
+export type IrysTransactionVars = {
   ids?: string[];
   after?: string;
   currency?: string;
@@ -37,4 +32,15 @@ export type TransactionVars = {
   order?: "ASC" | "DESC";
   hasTags?: boolean;
   tags?: { name: string; values: string[] }[];
+};
+
+export const irysTransactionsQuery: QueryInfo = {
+  name: "transactions",
+  query: transactions,
+  enumValues: ["order"],
+  vars: transactionVars,
+  paging: {
+    hasNextPage: "hasNextPage",
+    cursor: "cursor",
+  },
 };
