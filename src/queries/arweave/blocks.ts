@@ -7,7 +7,7 @@ export type ArweaveBlocks = typeof block;
 export const blocksVars: ArweaveBlocksVars = {
   ids: undefined,
   height: undefined,
-  limit: 10, // REMAPPED
+  pageSize: 10, // REMAPPED
   after: undefined,
   sort: "HEIGHT_DESC",
 };
@@ -18,7 +18,7 @@ export type ArweaveBlocksVars = {
     min?: number;
     max?: number;
   };
-  limit?: number; // REMAPPED
+  pageSize?: number; // REMAPPED
   after?: string;
   sort?: "HEIGHT_ASC" | "HEIGHT_DESC";
 };
@@ -28,7 +28,7 @@ export const arweaveBlocksQuery: QueryInfo = {
   query: block,
   vars: blocksVars,
   enumValues: ["sort"],
-  remapVars: { limit: "first" },
+  remapVars: { pageSize: "first" },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",

@@ -11,7 +11,7 @@ export const transactionsVars: ArweaveTransactionsVars = {
   tags: undefined,
   bundledIn: undefined,
   block: undefined,
-  limit: 10, // REMAPPED
+  pageSize: 10, // REMAPPED
   after: undefined,
   sort: "HEIGHT_DESC",
 };
@@ -23,7 +23,7 @@ export type ArweaveTransactionsVars = {
   tags?: { name: string; values: string[] }[];
   bundledIn?: string;
   block?: { min: number; max: number };
-  limit?: number;
+  pageSize?: number;
   after?: string;
   sort?: "HEIGHT_ASC" | "HEIGHT_DESC";
 };
@@ -33,7 +33,7 @@ export const arweaveTransactionsQuery: QueryInfo = {
   query: transaction,
   enumValues: ["sort"],
   vars: transactionsVars,
-  remapVars: { limit: "first" },
+  remapVars: { pageSize: "first" },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",

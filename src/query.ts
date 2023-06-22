@@ -10,6 +10,9 @@ import type { ArrayElement, BuilderMethods, Field, GQLResponse, QueryInfo, Retur
 
 // GraphQL query builder class, uses overload signatures to modify class generics to provide concise typings for any configured query
 // this approach does mean (atm anyway) we need to explicitly coerce return types to the correct "shape", but as most of the methods are dynamic, this isn't much of an issue.
+/**
+ * GraphQL query class - encapsulates all logic, types, and methods required to resolve queries
+ */
 export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends Record<string, any> = any, TReturn extends Record<string, any> = any> {
   // query variables
   protected queryVars: Record<string, any> = {};
@@ -186,7 +189,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param numResults Maximum number of results to return
    * @returns this (chainable)
    */
-  public maxResults(numResults: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  public limit(numResults: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.config.numResults = numResults;
     // @ts-expect-error types
     return this;
