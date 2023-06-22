@@ -30,6 +30,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!url) throw new Error("URL is required");
     this.url = new URL(url);
     this.config = { first: false, userProvided: false, numPages: Infinity, numResults: Infinity };
+    return this;
   }
 
   /**
@@ -64,7 +65,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     // {limit: "first"} -> remaps `limit` variable to `first` variable
     for (const [k, v] of Object.entries(this.queryInfo.remapVars ?? {})) {
       if (vars?.[k]) {
-        vars[v] = vars[k]; // FLIP
+        vars[v] = vars[k];
         vars[k] = undefined; // null keys are removed below
       }
     }
@@ -108,8 +109,6 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     // @ts-expect-error types - DO NOT SET RETURN TYPE TO `this` - TS will assume this should be an async function as `this` implements promise methods
     return this;
   }
-
-  // TODO: add support for non-page queries
 
   /**
    * Primary query execution method - builds & runs the query, returning result nodes and updating cursor info in queryVars

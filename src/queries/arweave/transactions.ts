@@ -5,7 +5,14 @@ export type ArweaveTransactions = typeof transaction;
 
 // default variables
 export const transactionsVars: ArweaveTransactionsVars = {
+  ids: undefined,
+  owners: undefined,
+  recipients: undefined,
+  tags: undefined,
+  bundledIn: undefined,
+  block: undefined,
   limit: 10, // REMAPPED
+  after: undefined,
   sort: "HEIGHT_DESC",
 };
 

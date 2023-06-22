@@ -5,7 +5,10 @@ export type ArweaveBlocks = typeof block;
 
 // default variables
 export const blocksVars: ArweaveBlocksVars = {
+  ids: undefined,
+  height: undefined,
   limit: 10, // REMAPPED
+  after: undefined,
   sort: "HEIGHT_DESC",
 };
 

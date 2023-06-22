@@ -37,7 +37,9 @@ export const transaction = {
 export type ArweaveTransaction = typeof transaction;
 
 // default variables
-export const transactionVars: ArweaveTransactionVars = {};
+export const transactionVars: ArweaveTransactionVars = {
+  id: undefined,
+};
 
 export type ArweaveTransactionVars = {
   id?: string;

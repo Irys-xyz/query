@@ -10,7 +10,9 @@ export const block = {
 export type ArweaveBlock = typeof block;
 
 // default variables
-export const blockVars: ArweaveBlockVars = {};
+export const blockVars: ArweaveBlockVars = {
+  id: undefined,
+};
 
 export type ArweaveBlockVars = {
   id?: string;

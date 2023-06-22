@@ -20,7 +20,14 @@ export type IrysTransactions = typeof transactions;
 
 // default variables
 export const transactionVars: IrysTransactionVars = {
+  ids: undefined,
+  after: undefined,
+  currency: undefined,
+  owners: undefined,
   limit: 100,
+  order: "ASC",
+  hasTags: undefined,
+  tags: undefined,
 };
 
 export type IrysTransactionVars = {
