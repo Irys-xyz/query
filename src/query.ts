@@ -32,7 +32,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   constructor({ url }: { url: string | URL } = { url: new URL("https://node1.bundlr.network/graphql") }) {
     if (!url) throw new Error("URL is required");
     this.url = new URL(url);
-    this.config = { first: false, userProvided: false, numPages: Infinity, numResults: Infinity };
+    this.config = { first: false, userProvided: false, numPages: Infinity, numResults: 1_000 };
     return this;
   }
 
@@ -280,7 +280,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   ): GraphQLQuery<Fields, Vars, Fields[]> & BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>>;
 
   public search<Fields extends Record<any, any> = any, Vars extends Record<string, any> = any, BuilderVars extends Record<string, any> = any>(
-    queryName: string,
+    queryName: "irys:transactions" | "arweave:transaction" | "arweave:transactions" | "arweave:block" | "arweave:blocks" | string,
     opts?: SearchOpts,
   ): GraphQLQuery<Fields, Vars, Fields[]> & BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>> {
     const query = opts?.query ?? queries[queryName];
