@@ -53,6 +53,7 @@ await queryByTags();
 
 ## Specifying Query Location
 
+
 When querying Irys, you must connect to the node-specific endpoint where you posted your transaction, when querying Arweave a universal endpoint is used for all queries. 
 
 When connecting to Irys, any of these values may be used:
