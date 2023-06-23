@@ -117,7 +117,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Primary query execution method - builds & runs the query, returning result nodes and updating cursor info in queryVars
    * @returns query result nodes
    */
-  protected async getPage(): Promise<TReturn | undefined> {
+  public async getPage(): Promise<TReturn | undefined> {
     if (this.resultTracker.done) return undefined;
     this.buildQuery();
     if (!this._query) throw new Error(`Unable to run undefined query`);
@@ -289,9 +289,9 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!query) throw new Error(`Unable to find query with name ${queryName}`);
     this.queryInfo = { ...query };
     this.queryFields = query.query;
-
-    // generate dynamic variable setter builder methods
+    if (queryName.includes("arweave") && this.url.host === "node1.bundlr.network") this.url = new URL("https://arweave.net");
     if (!opts?.skipVariableSetters) {
+      // generate dynamic variable setter builder methods
       for (const k of Object.keys(query.vars)) {
         if (this[k])
           throw new Error(
