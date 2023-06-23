@@ -1,4 +1,3 @@
-
 # @irys/query
 
 @irys/query is a powerful package that simplifies querying Irys and Arweave.
@@ -21,6 +20,8 @@ and yarn:
 ```console
 yarn add @irys/query
 ```
+
+TODO: Install instructions may change once the package is pushed
 
 ## Imports
 
@@ -48,6 +49,32 @@ const queryByTags = async () => {
 		.maxResults(20);
 };
 await queryByTags();
+```
+
+## Specifying Query Location
+
+When querying Irys, you must connect to the node-specific endpoint where you posted your transaction, when querying Arweave a universal endpoint is used for all queries. 
+
+When connecting to Irys, any of these values may be used:
+
+- https://node1.bundlr.network/graphql (DEFAULT)
+- https://node2.bundlr.network/graphql
+- https://devnet.bundlr.network/graphql
+
+When querying Arweave, any of these values may be used:
+
+- https://arweave.net/graphql (DEFAULT)
+- https://arweave.dev/graphql
+- https://arweave-search.goldsky.com/graphql
+
+```js
+const result = await new GraphQLQuery({ url: "https://node2.bundlr.network/graphql" })
+	.search("irys:transactions")
+	.fields({
+		id: true,
+	})
+	.tags([{ name: "Content-Type", values: ["image/png"] }])
+	.first();
 ```
 
 ## `.search()` Function
@@ -236,6 +263,22 @@ const result = await new GraphQLQuery()
 	.maxResults(20);
 ```
 
-## Pagination
+## Pagination / Streaming
 
-TODO
+In cases where you need a large number of results or are unsure of the number of results you'll need, the stream() method can be called 
+
+```js
+const stream = await new GraphQLQuery()
+	.search("irys:transactions")
+	.fields({
+		id: true,
+	})
+	.order("ASC")
+	.currency("solana")
+	.stream();
+
+for await (const result of stream) {
+	console.log(result);
+}
+```
+
