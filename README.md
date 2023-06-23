@@ -266,9 +266,10 @@ const result = await new GraphQLQuery()
 
 ## Pagination / Streaming
 
-In cases where you need a large number of results or are unsure of the number of results you'll need, the stream() method can be called 
+When you need a large number of results or are uncertain about the quantity required, make use of the stream() function. This function returns an iterable stream, which will continuously yield results as long as your query keeps producing them.
 
 ```js
+// Create the stream
 const stream = await new GraphQLQuery()
 	.search("irys:transactions")
 	.fields({
@@ -278,6 +279,7 @@ const stream = await new GraphQLQuery()
 	.currency("solana")
 	.stream();
 
+// Iterate over the results
 for await (const result of stream) {
 	console.log(result);
 }
