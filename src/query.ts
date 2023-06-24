@@ -41,7 +41,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * stores built query under `this.query` (protected) - accessible via `.toQuery`
    * @returns `this` (chainable)
    */
-  public buildQuery(): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  protected buildQuery(): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     // @ts-expect-error overloading
     if (this.config.userProvided) return this; // don't build if it's a user provided query string
     // builds query, reducing `this.queryFields` to a structured string with correct formatting
@@ -178,7 +178,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param numPages Maximum number of pages to return
    * @returns this (chainable)
    */
-  public maxPages(numPages: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  protected maxPages(numPages: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.config.numPages = numPages;
     // @ts-expect-error types
     return this;
@@ -201,7 +201,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Gets all results from the built query
    * @returns array of results
    */
-  public async all(): Promise<TReturn> {
+  protected async all(): Promise<TReturn> {
     const results: any[] = [];
     do {
       const page = await this.getPage();
@@ -216,7 +216,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   /**
    * Async generator, yields individual query result items
    */
-  public async *generator(): AsyncGenerator<Required<ArrayElement<TReturn>>> {
+  protected async *generator(): AsyncGenerator<Required<ArrayElement<TReturn>>> {
     do {
       const res = await this.getPage();
       if (!res) return;
@@ -381,7 +381,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Dummy method to access the internal `TReturn` generic type
    * @returns "tReturn"
    */
-  public tReturn(): TReturn {
+  protected tReturn(): TReturn {
     return "tReturn" as any as TReturn;
   }
 
@@ -389,7 +389,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Dummy method to access the internal `TQuery` generic type
    * @returns "tQuery"
    */
-  public tQuery(): TQuery {
+  protected tQuery(): TQuery {
     return "tQuery" as any as TQuery;
   }
 
@@ -397,7 +397,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Dummy method to access the internal `TVars` generic type
    * @returns "tVars"
    */
-  public tVars(): TVars {
+  protected tVars(): TVars {
     return "tVars" as any as TVars;
   }
 
