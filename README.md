@@ -55,7 +55,7 @@ const queryByTags = async () => {
 		})
 		.tags([{ name: "Content-Type", values: ["image/png"] }])
 		.order("ASC")
-		.maxResults(20);
+		.limit(20);
 };
 await queryByTags();
 ```
@@ -137,7 +137,7 @@ const result = await new GraphQLQuery()
 		id: true,
 	})
 	.tags([{ name: "Content-Type", values: ["image/png"] }])
-	.maxResults(20);
+	.limit(20);
 
 ```
 
@@ -150,7 +150,7 @@ const result = await new GraphQLQuery()
 		id: true,
 	})
 	.tags([{ name: "Content-Type", values: ["image/png", "image/jpg"] }])
-	.maxResults(20);
+	.limit(20);
 ```
 
 Search for multiple tags. The search employs AND logic, returning transactions tagged with ALL provided values.
@@ -165,7 +165,7 @@ const result = await new GraphQLQuery()
 		{ name: "Content-Type", values: ["image/png"] },
 		{ name: "Application-ID", values: ["myApp"] },
 	])
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Search By **Transaction ID**
@@ -182,7 +182,7 @@ const result = await new GraphQLQuery()
 		id: true,
 	})
 	.ids(["xXyv3u9nHHWGiMJl_DMgLwwRdOTlIlQZyqaK_rOkNZw", "_xE7tG1kl2FgCUDgJ5jNJeVA6R5kuys7A6f1qfh9_Kw"])
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Search By **Owner**
@@ -199,7 +199,7 @@ const result = await new GraphQLQuery()
 		address: true,
 	})
 	.owners(["UsWPlOBHRyfWcbrlC5sV3-pNUjOQEI5WmDxLnypc93I", "0x4adDE0b3C686B4453e007994edE91A7832CF3c99"])
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Search By Currency
@@ -215,7 +215,7 @@ const result = await new GraphQLQuery()
 		currency: true,
 	})
 	.currency("solana")
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Order
@@ -230,7 +230,7 @@ const result = await new GraphQLQuery()
 	})
 	.order("ASC")
 	.currency("solana")
-	.maxResults(20);
+	.limit(20);
 ```
 
 or descending (`DESC`) order based on timestamp. 
@@ -243,7 +243,7 @@ const result = await new GraphQLQuery()
 	})
 	.order("DESC")
 	.currency("solana")
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Obtaining Only The First Result
@@ -262,7 +262,7 @@ const result = await new GraphQLQuery()
 
 ## Limiting Search Results
 
-Use the `.maxResults()` function to limit the maximum number of results returned. This overrides the default value of 1000 results when searching Irys and 100 when searching Arweave directly.
+Use the `.limit()` function to limit the maximum number of results returned. This overrides the default value of 1000 results when searching Irys and 100 when searching Arweave directly.
 
 ```js
 const result = await new GraphQLQuery()
@@ -272,7 +272,7 @@ const result = await new GraphQLQuery()
 		address: true,
 	})
 	.ids(["xXyv3u9nHHWGiMJl_DMgLwwRdOTlIlQZyqaK_rOkNZw", "_xE7tG1kl2FgCUDgJ5jNJeVA6R5kuys7A6f1qfh9_Kw"])
-	.maxResults(20);
+	.limit(20);
 ```
 
 ## Pagination / Streaming
