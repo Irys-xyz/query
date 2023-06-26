@@ -7,6 +7,8 @@ import type { ArweaveTransaction, ArweaveTransactionVars } from "./queries/arwea
 import type { ArweaveTransactions, ArweaveTransactionsVars } from "./queries/arweave/transactions";
 import type { IrysTransactionVars, IrysTransactions } from "./queries/irys/transactions";
 import type { ArrayElement, BuilderMethods, Field, GQLResponse, QueryInfo, ReturnFields, SearchOpts } from "./types";
+import type { Options as RetryOptions } from "async-retry";
+import AsyncRetry from "async-retry";
 
 // GraphQL query builder class, uses overload signatures to modify class generics to provide concise typings for any configured query
 // this approach does mean (atm anyway) we need to explicitly coerce return types to the correct "shape", but as most of the methods are dynamic, this isn't much of an issue.
@@ -27,14 +29,20 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   // url of the node to query
   protected url: URL;
   // misc operational config
-  protected config: { first: boolean; userProvided: boolean; numPages: number; numResults: number };
+  protected config: { first: boolean; userProvided: boolean; numPages: number; numResults: number; retryOpts?: RetryOptions };
   // result tracker object, used to hold state for paging operations
   protected resultTracker: { numResults: number; numPages: number; done: boolean } = { numPages: 0, numResults: 0, done: false };
 
-  constructor({ url }: { url: string | URL } = { url: new URL("https://node1.bundlr.network/graphql") }) {
+  constructor({ url, retryConfig }: { url: string | URL; retryConfig?: RetryOptions } = { url: new URL("https://node1.bundlr.network/graphql") }) {
     if (!url) throw new Error("URL is required");
     this.url = new URL(url);
-    this.config = { first: false, userProvided: false, numPages: Infinity, numResults: 1_000 };
+    this.config = {
+      first: false,
+      userProvided: false,
+      numPages: Infinity,
+      numResults: 1_000,
+      retryOpts: { retries: 3, maxTimeout: 2_000, minTimeout: 500, ...retryConfig },
+    };
     return this;
   }
 
@@ -49,7 +57,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     // builds query, reducing `this.queryFields` to a structured string with correct formatting
     const toGQLString = (s: object | undefined): string =>
       JSON.stringify(s, (_, v) => {
-        if (v instanceof Array) return JSON.stringify(v);
+        if (v instanceof Array) return v[0]; /* JSON.stringify(v); */
         if (typeof v === "object") return v;
         if (v === false) return undefined;
         return "";
@@ -132,11 +140,15 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!this._query) throw new Error(`Unable to run undefined query`);
     let res;
     try {
-      res = await axios<GQLResponse<TQuery>>(this.url.toString(), {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        data: { query: this._query },
-      });
+      res = await AsyncRetry(
+        (_) =>
+          axios<GQLResponse<TQuery>>(this.url.toString(), {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            data: { query: this._query },
+          }),
+        this.config.retryOpts,
+      );
     } catch (e) {
       console.error(`Error running query ${this._query} - ${e} - (${JSON.stringify(e.response.data.errors)})`);
       throw e;
