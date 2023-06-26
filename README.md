@@ -98,7 +98,7 @@ The `.search()` function accepts a string parameter with one of the following fo
 
 ## `fields()` Function
 
-The `.fields()` function specifies the values to be returned. To limit the results, set a field's value to `false` or omit it entirely.
+The `.fields()` function specifies the values to be returned. To limit the results, set a field's value to `false` or omit it entirely.****
 
 The fields available for retrieval depend on the search type, when searching `irys:transactions`, the following fields are available. 
 
