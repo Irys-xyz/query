@@ -25,11 +25,20 @@ TODO: Install instructions may change once the package is pushed
 
 ## Imports
 
-Import GraphQLQuery with the following:
+Import the Irys Query package with the following:
 
 ```js
 import GraphQLQuery from "@irys/query";
 ```
+
+## Search Types
+
+TODO
+- `irys:transactions`: Searches transactions uploaded to any of Irys' nodes 
+- `arweave:transactions`: Searches all transactions posted to Arweave 
+- `arweave:block`: Searches inside the specified Arweave block
+- `arweave:blocks`: Searches all of Arweave for a specific block
+
 
 ## Creating A Query Object
 
@@ -87,31 +96,33 @@ The `.search()` function accepts a string parameter with one of the following fo
 - `arweave:block`: Searches inside the specified Arweave block
 - `arweave:blocks`: Searches all of Arweave for a specific block
 
-TODO: Arweave queries have yet to be tested / documented
-
 ## `fields()` Function
 
 The `.fields()` function specifies the values to be returned. To limit the results, set a field's value to `false` or omit it entirely.
 
+The fields available for retrieval depend on the search type, when searching `irys:transactions`, the following fields are available. 
+
 ```js
 .fields({
-	id: true,
-	currency: true,
-	address: true,
+	id: true, // Transaction ID
+	currency: true, // Currency used for payment
+	address: true, // Cross-chain address used for signing and payment
 	receipt: {
-		deadlineHeight: true,
-		signature: true,
-		timestamp: true,
-		version: true,
+		deadlineHeight: true, // The block number by which the transaction must be finalized on Arweave
+		signature: true, // A signed deep hash of the JSON receipt
+		timestamp: true, // Timestamp, millisecond accurate, of the time the uploaded was verified
+		version: true, // The receipt version, currently 1.0.0
 	},
-	tags: {
+	tags: [{ // An array of tags associated with the upload
 		name: true,
 		value: true,
-	},
-	signature: true,
-	timestamp: true,
+	}],
+	signature: true, // A signed deep hash of the JSON receipt
+	timestamp: true, // Timestamp, millisecond accurate, of the time the uploaded was verified
 })
 ```
+
+TODO, list available fields for all query types
 
 ## Search By **Tags**
 
