@@ -43,17 +43,23 @@ export type Pretty<T> = T extends (...args: any[]) => any ? T : T extends abstra
 // custom types
 // F is possible fields, S is user selection
 // maps user provided fields object to possible fields
-export type ReturnFields<F extends S, S> =
+export type ReturnFields<F extends S, S extends UserField> =
   | {
-      [K in keyof S]: F[K] extends (infer U)[] // @ts-expect-error - illegal constraints :) TODO: fix
-        ? Pick<U, keyof S[K]>[]
+      [K in keyof S]: F[K] extends (infer U)[] // if this is an array
+        ? Pick<U, keyof S[K]>[] // flatten
         : S[K] extends object
-        ? ReturnFields<F[K], S[K]>
+        ? ReturnFields<F[K], S[K]> // recurse
         : S[K] extends true
-        ? Required<F[K]>
+        ? Required<F[K]> // "show" this field in the output type
         : undefined;
     }
   | undefined;
+
+// @ts-expect-error doesn't like circular references TODO: fix
+type UserField = Record<string, true | (string | UserField)[] | UserField>;
+/* {
+  [key: string]: true | (UserField | string)[] | UserField;
+}; */
 
 // maps fields into structural optional booleans for user selection
 export type Field<T extends Record<string, any>> = {
@@ -67,7 +73,7 @@ export type Field<T extends Record<string, any>> = {
 // constructs function signatures from a type for dynamic builder methods
 export type BuilderMethods<T extends Record<string, any>, R = any> = {
   [K in keyof T]-?: T[K] extends object ? BuilderMethods<T[K]> : (field: T[K]) => R & BuilderMethods<T, R>;
-};
+} & R;
 
 // maps an array back to the type of it's element
 export type ArrayElement<T> = T extends (infer U)[] ? U : T;

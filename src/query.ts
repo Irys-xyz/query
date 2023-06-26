@@ -10,6 +10,8 @@ import type { ArrayElement, BuilderMethods, Field, GQLResponse, QueryInfo, Retur
 
 // GraphQL query builder class, uses overload signatures to modify class generics to provide concise typings for any configured query
 // this approach does mean (atm anyway) we need to explicitly coerce return types to the correct "shape", but as most of the methods are dynamic, this isn't much of an issue.
+// TODO: look into constructor facade pattern - https://gist.github.com/kourge/9715e0dd59c28e776fb598d407636106
+// TODO: look into https://discord.com/channels/508357248330760243/1122523559097548870
 /**
  * GraphQL query class - encapsulates all logic, types, and methods required to resolve queries
  */
@@ -41,7 +43,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * stores built query under `this.query` (protected) - accessible via `.toQuery`
    * @returns `this` (chainable)
    */
-  protected buildQuery(): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  protected buildQuery(): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     // @ts-expect-error overloading
     if (this.config.userProvided) return this; // don't build if it's a user provided query string
     // builds query, reducing `this.queryFields` to a structured string with correct formatting
@@ -178,7 +180,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param numPages Maximum number of pages to return
    * @returns this (chainable)
    */
-  protected maxPages(numPages: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  protected maxPages(numPages: number): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.config.numPages = numPages;
     // @ts-expect-error types
     return this;
@@ -189,7 +191,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param numResults Maximum number of results to return
    * @returns this (chainable)
    */
-  public limit(numResults: number): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  public limit(numResults: number): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.config.numResults = numResults;
     // @ts-expect-error types
     return this;
@@ -243,53 +245,48 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param queryName the GraphQL name of the query
    * @param opts Options to provide your own queryInfo object, or to skip automatic field setter creation
    */
-  // @ts-expect-error overload
+
   search(
     queryName: "irys:transactions",
     opts?: SearchOpts,
-  ): GraphQLQuery<IrysTransactions, IrysTransactionVars, IrysTransactions[]> &
-    BuilderMethods<IrysTransactionVars, GraphQLQuery<IrysTransactions, IrysTransactionVars, IrysTransactions[]>>;
+  ): BuilderMethods<IrysTransactionVars, GraphQLQuery<IrysTransactions, IrysTransactionVars, IrysTransactions[]>>;
 
   search(
     queryName: "arweave:transaction",
     opts?: SearchOpts,
-  ): GraphQLQuery<ArweaveTransaction, ArweaveTransactionVars, ArweaveTransaction[]> &
-    BuilderMethods<ArweaveTransactionVars, GraphQLQuery<ArweaveTransaction, ArweaveTransactionVars, ArweaveTransaction[]>>;
+  ): BuilderMethods<ArweaveTransactionVars, GraphQLQuery<ArweaveTransaction, ArweaveTransactionVars, ArweaveTransaction[]>>;
 
   search(
     queryName: "arweave:transactions",
     opts?: SearchOpts,
-  ): GraphQLQuery<ArweaveTransactions, ArweaveTransactionsVars, ArweaveTransactions[]> &
-    BuilderMethods<ArweaveTransactionsVars, GraphQLQuery<ArweaveTransactions, ArweaveTransactionsVars, ArweaveTransactions[]>>;
+  ): BuilderMethods<ArweaveTransactionsVars, GraphQLQuery<ArweaveTransactions, ArweaveTransactionsVars, ArweaveTransactions[]>>;
 
   search(
     queryName: "arweave:block",
     opts?: SearchOpts,
-  ): GraphQLQuery<ArweaveBlock, ArweaveBlockVars, ArweaveBlock[]> &
-    BuilderMethods<ArweaveBlockVars, GraphQLQuery<ArweaveBlock, ArweaveBlockVars, ArweaveBlock[]>>;
+  ): BuilderMethods<ArweaveBlockVars, GraphQLQuery<ArweaveBlock, ArweaveBlockVars, ArweaveBlock[]>>;
 
   search(
     queryName: "arweave:blocks",
     opts?: SearchOpts,
-  ): GraphQLQuery<ArweaveBlocks, ArweaveBlocksVars, ArweaveBlocks[]> &
-    BuilderMethods<ArweaveBlocksVars, GraphQLQuery<ArweaveBlocks, ArweaveBlocksVars, ArweaveBlocks[]>>;
+  ): BuilderMethods<ArweaveBlocksVars, GraphQLQuery<ArweaveBlocks, ArweaveBlocksVars, ArweaveBlocks[]>>;
 
   search<Fields extends Record<any, any> = any, Vars extends Record<string, any> = any, BuilderVars extends Record<string, any> = any>(
     queryName: string,
     opts?: SearchOpts,
-  ): GraphQLQuery<Fields, Vars, Fields[]> & BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>>;
+  ): BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>>;
 
   public search<Fields extends Record<any, any> = any, Vars extends Record<string, any> = any, BuilderVars extends Record<string, any> = any>(
     queryName: "irys:transactions" | "arweave:transaction" | "arweave:transactions" | "arweave:block" | "arweave:blocks" | string,
     opts?: SearchOpts,
-  ): GraphQLQuery<Fields, Vars, Fields[]> & BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>> {
+  ): BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>> {
     const query = opts?.query ?? queries[queryName];
     // @ts-expect-error overloading
     if (query === false) return this;
     if (!query) throw new Error(`Unable to find query with name ${queryName}`);
     this.queryInfo = { ...query };
     this.queryFields = query.query;
-    if (queryName.includes("arweave") && this.url.host === "node1.bundlr.network") this.url = new URL("https://arweave.net");
+    if (queryName.includes("arweave") && this.url.host === "node1.bundlr.network") this.url = new URL("https://arweave.net/graphql");
     if (!opts?.skipVariableSetters) {
       // generate dynamic variable setter builder methods
       for (const k of Object.keys(query.vars)) {
@@ -333,7 +330,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   public fields<T extends Field<TQuery> = Field<TQuery>>(
     fields: T,
     skipFieldCheck = false,
-  ): GraphQLQuery<TQuery, TVars, ReturnFields<TQuery, T>[]> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, ReturnFields<TQuery, T>[]>> {
+  ): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, ReturnFields<TQuery, T>[]>> {
     // console.log("fields", fields);
     // validate provided fields against default fields
     // default/allowed fields is under `this.queryFields`
@@ -360,7 +357,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param variables variable object to set
    * @returns this (chainable)
    */
-  public variables(variables: TVars): GraphQLQuery<TQuery, TVars, TReturn> & BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+  public variables(variables: TVars): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.queryVars = variables;
     // @ts-expect-error - dynamic builder props
     return this;
