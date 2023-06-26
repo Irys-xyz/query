@@ -9,7 +9,7 @@ export const blocksVars: ArweaveBlocksVars = {
   height: undefined,
   pageSize: 10, // REMAPPED
   after: undefined,
-  sort: "HEIGHT_DESC",
+  sort: "DESC", // REMAPPED
 };
 
 export type ArweaveBlocksVars = {
@@ -20,7 +20,7 @@ export type ArweaveBlocksVars = {
   };
   pageSize?: number; // REMAPPED
   after?: string;
-  sort?: "HEIGHT_ASC" | "HEIGHT_DESC";
+  sort?: "ASC" | "DESC"; // REMAPPED
 };
 
 export const arweaveBlocksQuery: QueryInfo = {
@@ -28,7 +28,11 @@ export const arweaveBlocksQuery: QueryInfo = {
   query: block,
   vars: blocksVars,
   enumValues: ["sort"],
-  remapVars: { pageSize: "first" },
+  remapVars: {
+    pageSize: "first",
+    // replace ASC/DESC to HEIGHT prefixed versions
+    sort: (k, v) => [k, v === "ASC" ? "HEIGHT_ASC" : "HEIGHT_DESC"],
+  },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",

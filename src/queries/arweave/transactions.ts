@@ -6,26 +6,26 @@ export type ArweaveTransactions = typeof transaction;
 // default variables
 export const transactionsVars: ArweaveTransactionsVars = {
   ids: undefined,
-  owners: undefined,
+  from: undefined, // REMAPPED
   recipients: undefined,
   tags: undefined,
   bundledIn: undefined,
   block: undefined,
   pageSize: 10, // REMAPPED
   after: undefined,
-  sort: "HEIGHT_DESC",
+  sort: "DESC", // REMAPPED
 };
 
 export type ArweaveTransactionsVars = {
   ids?: string[];
-  owners?: string[];
+  from?: string[];
   recipients?: string[];
   tags?: { name: string; values: string[] }[];
   bundledIn?: string;
   block?: { min: number; max: number };
   pageSize?: number;
   after?: string;
-  sort?: "HEIGHT_ASC" | "HEIGHT_DESC";
+  sort?: "ASC" | "DESC";
 };
 
 export const arweaveTransactionsQuery: QueryInfo = {
@@ -33,7 +33,12 @@ export const arweaveTransactionsQuery: QueryInfo = {
   query: transaction,
   enumValues: ["sort"],
   vars: transactionsVars,
-  remapVars: { pageSize: "first" },
+  remapVars: {
+    pageSize: "first",
+    from: "owners",
+    // replace ASC/DESC to HEIGHT prefixed versions
+    sort: (k, v) => [k, v === "ASC" ? "HEIGHT_ASC" : "HEIGHT_DESC"],
+  },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",

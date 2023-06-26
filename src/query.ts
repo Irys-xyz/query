@@ -68,11 +68,18 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     const vars = { ...this.queryInfo.vars, ...this.queryVars };
     // remap keys - primarily done to prevent conflicts with builder methods.
     // {limit: "first"} -> remaps `limit` variable to `first` variable
+    // {limit: (k,v) => ["first",v]} does the same thing
     for (const [k, v] of Object.entries(this.queryInfo.remapVars ?? {})) {
-      if (vars?.[k]) {
+      if (!vars?.[k]) continue;
+      if (typeof v === "function") {
+        // provided mapper fn
+        const [nk, nv] = v(k, vars[k]);
+        vars[nk] = nv;
+        if (nk === k) continue; // don't null out key if it's the same key
+      } else {
         vars[v] = vars[k];
-        vars[k] = undefined; // null keys are removed below
       }
+      vars[k] = undefined; // null keys are removed below
     }
     // reduces queryVars to inline vars, for convenience. (using separate means we have to annotate the GQL type)
     const qVars = JSON.stringify(vars, function (k, v) {

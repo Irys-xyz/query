@@ -26,7 +26,7 @@ export type QueryInfo = {
   /** variables to supply the query */
   vars: Record<string, any>;
   /** Tell the GQL compiler to remap the variable with name <key> to variable with name <value> */
-  remapVars?: Record<string, string>;
+  remapVars?: Record<string, string | ((key: string, value: string) => [newKey: string, newValue: string])>;
   paging?: {
     /** name of the hasNextPage pageInfo var */
     hasNextPage: string;

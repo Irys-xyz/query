@@ -23,9 +23,9 @@ export const transactionVars: IrysTransactionVars = {
   ids: undefined,
   after: undefined,
   currency: undefined,
-  owners: undefined,
+  from: undefined, // REMAPPED
   pageSize: 100,
-  order: "ASC",
+  sort: "ASC", // REMAPPED
   hasTags: undefined,
   tags: undefined,
 };
@@ -34,9 +34,9 @@ export type IrysTransactionVars = {
   ids?: string[];
   after?: string;
   currency?: string;
-  owners?: string[];
+  from?: string[];
   pageSize?: number;
-  order?: "ASC" | "DESC";
+  sort?: "ASC" | "DESC"; // REMAPPED
   hasTags?: boolean;
   tags?: { name: string; values: string[] }[];
 };
@@ -46,7 +46,7 @@ export const irysTransactionsQuery: QueryInfo = {
   query: transactions,
   enumValues: ["order"],
   vars: transactionVars,
-  remapVars: { pageSize: "limit" },
+  remapVars: { pageSize: "limit", sort: "order", from: "owners" },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",
