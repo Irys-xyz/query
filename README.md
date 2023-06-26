@@ -33,7 +33,7 @@ import GraphQLQuery from "@irys/query";
 
 ## Search Types
 
-TODO
+TODO: 
 - `irys:transactions`: Searches transactions uploaded to any of Irys' nodes 
 - `arweave:transactions`: Searches all transactions posted to Arweave 
 - `arweave:block`: Searches inside the specified Arweave block
@@ -47,17 +47,14 @@ Query objects are constructed via chaining. Instantiate a new object, specify se
 To retrieve the 20 latest transaction IDs associated with uploads having `Content-Type` set to `image/png` on Irys, use the following:
 
 ```js
-const queryByTags = async () => {
-	const result = await new GraphQLQuery()
-		.search("irys:transactions")
-		.fields({
-			id: true,
-		})
-		.tags([{ name: "Content-Type", values: ["image/png"] }])
-		.order("ASC")
-		.limit(20);
-};
-await queryByTags();
+const result = await new GraphQLQuery()
+	.search("irys:transactions")
+	.fields({
+		id: true,
+	})
+	.tags([{ name: "Content-Type", values: ["image/png"] }])
+	.sort("ASC")
+	.limit(20);
 ```
 
 ## Specifying Query Location
@@ -173,7 +170,6 @@ const result = await new GraphQLQuery()
 Search for transactions matching one or more transaction IDs.
 
 The search employs OR logic, returning transactions tagged with ANY provided value:
-
 
 ```js
 const result = await new GraphQLQuery()
