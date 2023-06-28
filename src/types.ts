@@ -1,3 +1,5 @@
+import type { Options as RetryOptions } from "async-retry";
+
 export type GQLResponse<T> = {
   data:
     | Record<
@@ -36,6 +38,7 @@ export type QueryInfo = {
 };
 
 export type SearchOpts = { skipVariableSetters?: boolean; query?: QueryInfo | false };
+export type QueryCtorOpts = { url: URL | string; retryConfig?: RetryOptions };
 
 // forces full type resolution, aka "intellisense pretty printing"
 export type Pretty<T> = T extends (...args: any[]) => any ? T : T extends abstract new (...args: any[]) => any ? T : { [K in keyof T]: T[K] };
@@ -77,3 +80,9 @@ export type BuilderMethods<T extends Record<string, any>, R = any> = {
 
 // maps an array back to the type of it's element
 export type ArrayElement<T> = T extends (infer U)[] ? U : T;
+
+export declare function assertIs<T>(value: unknown): asserts value is T;
+
+export type HasBuilderMethods<T extends Record<string, any>, R = any> = {
+  [K in keyof T]-?: T[K] extends object ? BuilderMethods<T[K]> : (field: T[K]) => R & BuilderMethods<T, R>;
+};

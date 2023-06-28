@@ -1,2 +1,2 @@
-export { GraphQLQuery } from "./query";
-export { GraphQLQuery as default } from "./query";
+export { Query } from "./query";
+export { Query as default } from "./query";
