@@ -44,14 +44,11 @@ TODO:
 
 Query objects are constructed via chaining. Instantiate a new object, specify search location, define return fields, set search criteria, and execute the search.
 
-To retrieve the 20 latest transaction IDs associated with uploads having `Content-Type` set to `image/png` on Irys, use the following:
+To retrieve the 20 latest transactions with the tag `Content-Type` set to `image/png` on Irys, use the following:
 
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.tags([{ name: "Content-Type", values: ["image/png"] }])
 	.sort("ASC")
 	.limit(20);
@@ -77,11 +74,7 @@ When querying Arweave, any of these values may be used:
 ```js
 const result = await new GraphQLQuery({ url: "https://node2.bundlr.network/graphql" })
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.tags([{ name: "Content-Type", values: ["image/png"] }])
-	.first();
 ```
 
 ## `.search()` Function
@@ -130,11 +123,8 @@ Search for a single tag name / value pair:
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.tags([{ name: "Content-Type", values: ["image/png"] }])
-	.limit(20);
+	.sort("ASC");
 
 ```
 
@@ -143,11 +133,7 @@ Search for a single tag name with a list of possible values. The search employs 
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.tags([{ name: "Content-Type", values: ["image/png", "image/jpg"] }])
-	.limit(20);
 ```
 
 Search for multiple tags. The search employs AND logic, returning transactions tagged with ALL provided values.
@@ -155,14 +141,11 @@ Search for multiple tags. The search employs AND logic, returning transactions t
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.tags([
 		{ name: "Content-Type", values: ["image/png"] },
 		{ name: "Application-ID", values: ["myApp"] },
 	])
-	.limit(20);
+
 ```
 
 ## Search By **Transaction ID**
@@ -174,28 +157,22 @@ The search employs OR logic, returning transactions tagged with ANY provided val
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.ids(["xXyv3u9nHHWGiMJl_DMgLwwRdOTlIlQZyqaK_rOkNZw", "_xE7tG1kl2FgCUDgJ5jNJeVA6R5kuys7A6f1qfh9_Kw"])
-	.limit(20);
+
 ```
 
-## Search By **Owner**
+## Search By **Transaction Sender**
 
-The `.owners()` function allows for searching of transactions matching one or multiple wallet addresses linked to the wallet used when signing and funding the upload. Addresses from any of [Irys' supported chains](https://docs.bundlr.network/overview/supported-tokens) are accepted.
+Use the `from()` function ... TODO ... redo all like this
+
+The `.from()` function allows for searching of transactions matching one or multiple wallet addresses linked to the wallet used when signing and funding the upload. Addresses from any of [Irys' supported chains](https://docs.bundlr.network/overview/supported-tokens) are accepted.
 
 The search employs OR logic, returning transactions tagged with ANY provided value:
 
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-		address: true,
-	})
-	.owners(["UsWPlOBHRyfWcbrlC5sV3-pNUjOQEI5WmDxLnypc93I", "0x4adDE0b3C686B4453e007994edE91A7832CF3c99"])
-	.limit(20);
+	.from(["UsWPlOBHRyfWcbrlC5sV3-pNUjOQEI5WmDxLnypc93I", "0x4adDE0b3C686B4453e007994edE91A7832CF3c99"])
 ```
 
 ## Search By Currency
@@ -206,12 +183,7 @@ The `currency()` function allows for searching for transactions based on the tok
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-		currency: true,
-	})
 	.currency("solana")
-	.limit(20);
 ```
 
 ## Order
@@ -221,12 +193,8 @@ The `order()` function allows specifying result sorting in ascending (`ASC`)
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.order("ASC")
-	.currency("solana")
-	.limit(20);
+	.currency("ethereum")
 ```
 
 or descending (`DESC`) order based on timestamp. 
@@ -234,12 +202,8 @@ or descending (`DESC`) order based on timestamp.
 ```js
 const result = await new GraphQLQuery()
 	.search("irys:transactions")
-	.fields({
-		id: true,
-	})
 	.order("DESC")
-	.currency("solana")
-	.limit(20);
+	.currency("matic")
 ```
 
 ## Obtaining Only The First Result
