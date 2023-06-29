@@ -105,10 +105,12 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     // {limit: "first"} -> remaps `limit` variable to `first` variable
     // {limit: (k,v) => ["first",v]} does the same thing
     for (const [k, v] of Object.entries(this.queryInfo.remapVars ?? {})) {
-      if (!vars?.[k]) continue;
+      if (vars?.[k] === undefined) continue;
       if (typeof v === "function") {
         // provided mapper fn
-        const [nk, nv] = v(k, vars[k]);
+        const m = v(k, vars[k], vars);
+        if (!m) continue;
+        const [nk, nv] = m;
         vars[nk] = nv;
         if (nk === k) continue; // don't null out key if it's the same key
       } else {
