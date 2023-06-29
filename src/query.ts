@@ -1,11 +1,11 @@
 import { GraphQLQuery } from "./graphql";
 import { queries } from "./queries";
-import type { ArweaveBlock, ArweaveBlockVars } from "./queries/arweave/block";
 import type { ArweaveBlocks, ArweaveBlocksVars } from "./queries/arweave/blocks";
-import type { ArweaveTransaction, ArweaveTransactionVars } from "./queries/arweave/transaction";
 import type { ArweaveTransactions, ArweaveTransactionsVars } from "./queries/arweave/transactions";
 import type { IrysTransactionVars, IrysTransactions } from "./queries/irys/transactions";
 import type { BuilderMethods, QueryCtorOpts, SearchOpts } from "./types";
+// import type { ArweaveBlock, ArweaveBlockVars } from "./queries/arweave/block";
+// import type { ArweaveTransaction, ArweaveTransactionVars } from "./queries/arweave/transaction";
 
 export class Query {
   protected opts: QueryCtorOpts;
@@ -33,19 +33,19 @@ export class Query {
   ): BuilderMethods<IrysTransactionVars, GraphQLQuery<IrysTransactions, IrysTransactionVars, IrysTransactions[]>>;
 
   search(
-    queryName: "arweave:transaction",
-    opts?: SearchOpts,
-  ): BuilderMethods<ArweaveTransactionVars, GraphQLQuery<ArweaveTransaction, ArweaveTransactionVars, ArweaveTransaction[]>>;
-
-  search(
     queryName: "arweave:transactions",
     opts?: SearchOpts,
   ): BuilderMethods<ArweaveTransactionsVars, GraphQLQuery<ArweaveTransactions, ArweaveTransactionsVars, ArweaveTransactions[]>>;
 
-  search(
-    queryName: "arweave:block",
-    opts?: SearchOpts,
-  ): BuilderMethods<ArweaveBlockVars, GraphQLQuery<ArweaveBlock, ArweaveBlockVars, ArweaveBlock[]>>;
+  // search(
+  //   queryName: "arweave:block",
+  //   opts?: SearchOpts,
+  // ): BuilderMethods<ArweaveBlockVars, GraphQLQuery<ArweaveBlock, ArweaveBlockVars, ArweaveBlock[]>>;
+
+  // search(
+  //   queryName: "arweave:transaction",
+  //   opts?: SearchOpts,
+  // ): BuilderMethods<ArweaveTransactionVars, GraphQLQuery<ArweaveTransaction, ArweaveTransactionVars, ArweaveTransaction[]>>;
 
   search(
     queryName: "arweave:blocks",
@@ -58,7 +58,7 @@ export class Query {
   ): BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>>;
 
   public search<Fields extends Record<any, any> = any, Vars extends Record<string, any> = any, BuilderVars extends Record<string, any> = any>(
-    queryName: "irys:transactions" | "arweave:transaction" | "arweave:transactions" | "arweave:block" | "arweave:blocks" | string,
+    queryName: string,
     opts?: SearchOpts,
   ): BuilderMethods<BuilderVars, GraphQLQuery<Fields, Vars, Fields[]>> {
     // const queryInstance =
