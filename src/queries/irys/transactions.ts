@@ -28,6 +28,8 @@ export const transactionVars: IrysTransactionVars = {
   sort: "ASC", // REMAPPED
   hasTags: undefined,
   tags: undefined,
+  fromTimestamp: undefined, // REMAPPED
+  toTimestamp: undefined,
 };
 
 export type IrysTransactionVars = {
@@ -39,6 +41,8 @@ export type IrysTransactionVars = {
   sort?: "ASC" | "DESC"; // REMAPPED
   hasTags?: boolean;
   tags?: { name: string; values: string[] }[];
+  fromTimestamp?: Date | number;
+  toTimestamp?: Date | number;
 };
 
 export const irysTransactionsQuery: QueryInfo = {
@@ -46,7 +50,19 @@ export const irysTransactionsQuery: QueryInfo = {
   query: transactions,
   enumValues: ["order"],
   vars: transactionVars,
-  remapVars: { pageSize: "limit", sort: "order", from: "owners" },
+  remapVars: {
+    pageSize: "limit",
+    sort: "order",
+    from: "owners",
+    fromTimestamp: (_k, v, vars) => {
+      vars.timestamp = { ...vars.timestamp, from: new Date(v).getTime() };
+      vars.fromTimestamp = undefined;
+    },
+    toTimestamp: (_k, v, vars) => {
+      vars.timestamp = { ...vars.timestamp, to: new Date(v).getTime() };
+      vars.toTimestamp = undefined;
+    },
+  },
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",

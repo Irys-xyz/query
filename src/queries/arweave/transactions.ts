@@ -7,7 +7,7 @@ export type ArweaveTransactions = typeof transaction;
 export const transactionsVars: ArweaveTransactionsVars = {
   ids: undefined,
   from: undefined, // REMAPPED
-  recipients: undefined,
+  to: undefined, // REMAPPED
   tags: undefined,
   bundledIn: undefined,
   block: undefined,
@@ -19,7 +19,7 @@ export const transactionsVars: ArweaveTransactionsVars = {
 export type ArweaveTransactionsVars = {
   ids?: string[];
   from?: string[];
-  recipients?: string[];
+  to?: string[];
   tags?: { name: string; values: string[] }[];
   bundledIn?: string;
   block?: { min: number; max: number };
@@ -36,6 +36,7 @@ export const arweaveTransactionsQuery: QueryInfo = {
   remapVars: {
     pageSize: "first",
     from: "owners",
+    to: "recipients",
     // replace ASC/DESC to HEIGHT prefixed versions
     sort: (k, v) => [k, v === "ASC" ? "HEIGHT_ASC" : "HEIGHT_DESC"],
   },
