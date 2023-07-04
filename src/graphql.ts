@@ -169,18 +169,18 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!this._query) throw new Error(`Unable to run undefined query`);
     let res;
     try {
-      res = await AsyncRetry(
-        (_) =>
-          axios<GQLResponse<TQuery>>(this.url.toString(), {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            data: { query: this._query },
-          }),
-        this.config.retryOpts,
-      );
+      res = await AsyncRetry(async (_) => {
+        const r = await axios<GQLResponse<TQuery>>(this.url.toString(), {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          data: { query: this._query },
+        });
+        if (r.data.errors) throw r.data;
+        return r;
+      }, this.config.retryOpts);
     } catch (e) {
-      console.error(`Error running query ${this._query} - ${e} - (${JSON.stringify(e.response.data.errors)})`);
-      throw e;
+      // console.error(`Error running query ${this._query} - ${e} - (${JSON.stringify(e?.response?.data?.errors ?? e?.errors ?? e)})`);
+      throw { error: e, query: this._query };
     }
 
     if (this.config.userProvided) return this.trimmer([res.data.data].flat(20) as unknown as TReturn);
@@ -384,12 +384,12 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * @param onFulfilled - optional onFulfilled callback
    * @returns - all results for built query
    */
-  public async then(onFulfilled?: ((value: TReturn) => any | PromiseLike<TReturn>) | undefined | null): Promise<TReturn | never> {
-    const res = await this.all();
-    if (onFulfilled) {
-      return await onFulfilled(res);
-    }
-    return res;
+  public async then(
+    onFulfilled?: ((value: TReturn) => any | PromiseLike<TReturn>) | undefined | null,
+    onRejected?: (value: Error) => any | PromiseLike<Error> | undefined | null,
+  ): Promise<TReturn | never> {
+    const res = this.all();
+    return res.then(onFulfilled, onRejected);
   }
 
   public async catch(onReject?: ((value: TReturn) => any | PromiseLike<TReturn>) | undefined | null): Promise<null> {

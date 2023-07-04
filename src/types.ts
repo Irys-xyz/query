@@ -10,6 +10,7 @@ export type GQLResponse<T> = {
         }
       >
     | T;
+  errors?: { message: string }[];
 };
 
 export type PageInfo = {
