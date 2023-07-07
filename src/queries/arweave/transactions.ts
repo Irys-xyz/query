@@ -10,7 +10,9 @@ export const transactionsVars: ArweaveTransactionsVars = {
   to: undefined, // REMAPPED
   tags: undefined,
   bundledIn: undefined,
-  block: undefined,
+  // block: undefined,
+  minHeight: undefined,
+  maxHeight: undefined,
   pageSize: 10, // REMAPPED
   after: undefined,
   sort: "DESC", // REMAPPED
@@ -22,7 +24,9 @@ export type ArweaveTransactionsVars = {
   to?: string[];
   tags?: { name: string; values: string[] }[];
   bundledIn?: string;
-  block?: { min: number; max: number };
+  // block?: { min: number; max: number };
+  minHeight?: number;
+  maxHeight?: number;
   pageSize?: number;
   after?: string;
   sort?: "ASC" | "DESC";
@@ -39,6 +43,14 @@ export const arweaveTransactionsQuery: QueryInfo = {
     to: "recipients",
     // replace ASC/DESC to HEIGHT prefixed versions
     sort: (k, v) => [k, v === "ASC" ? "HEIGHT_ASC" : "HEIGHT_DESC"],
+    minHeight: (_k, v, vars) => {
+      vars.block = { ...vars.block, min: v };
+      vars.minHeight = undefined;
+    },
+    maxHeight: (_k, v, vars) => {
+      vars.block = { ...vars.block, max: v };
+      vars.maxHeight = undefined;
+    },
   },
   paging: {
     hasNextPage: "hasNextPage",
