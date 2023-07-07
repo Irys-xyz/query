@@ -91,7 +91,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
       })
         .replaceAll(`:`, "")
         .replaceAll(`"`, "")
-        .replaceAll(",", "\n");
+        .replaceAll(",", "\n          ");
 
     const nodeQuery = toGQLString(this.queryFields);
     // the hasNextPage field can vary
@@ -175,12 +175,15 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
           headers: { "Content-Type": "application/json" },
           data: { query: this._query },
         });
-        if (r.data.errors) throw r.data;
+        if (r.data.errors) throw r;
         return r;
       }, this.config.retryOpts);
     } catch (e) {
-      // console.error(`Error running query ${this._query} - ${e} - (${JSON.stringify(e?.response?.data?.errors ?? e?.errors ?? e)})`);
-      throw { error: e, query: this._query };
+      throw new Error(
+        `Error running query\n ${this._query} - ${e.message ? e.message + " -" : ""} (${JSON.stringify(
+          e?.data?.errors.map((e) => e.message) ?? e?.errors ?? e,
+        )}) `,
+      );
     }
 
     if (this.config.userProvided) return this.trimmer([res.data.data].flat(20) as unknown as TReturn);

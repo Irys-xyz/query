@@ -23,7 +23,7 @@ export type ArweaveTransactionsVars = {
   from?: string[];
   to?: string[];
   tags?: { name: string; values: string[] }[];
-  bundledIn?: string;
+  bundledIn?: string[];
   // block?: { min: number; max: number };
   minHeight?: number;
   maxHeight?: number;
