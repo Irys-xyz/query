@@ -26,7 +26,7 @@ export const transactionVars: IrysTransactionVars = {
   from: undefined, // REMAPPED
   pageSize: 100,
   sort: "ASC", // REMAPPED
-  hasTags: undefined,
+  // hasTags: undefined,
   tags: undefined,
   fromTimestamp: undefined, // REMAPPED
   toTimestamp: undefined,
@@ -39,7 +39,7 @@ export type IrysTransactionVars = {
   from?: string[];
   pageSize?: number;
   sort?: "ASC" | "DESC"; // REMAPPED
-  hasTags?: boolean;
+  // hasTags?: boolean;
   tags?: { name: string; values: string[] }[];
   fromTimestamp?: Date | number;
   toTimestamp?: Date | number;
