@@ -313,7 +313,6 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     fields: T,
     skipFieldCheck = false,
   ): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, ReturnFields<TQuery, T>[]>> {
-    // console.log("fields", fields);
     // validate provided fields against default fields
     // default/allowed fields is under `this.queryFields`
     // user selected fields are under `fields`
@@ -335,12 +334,12 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   }
 
   /**
-   * Sets variables using an object
+   * Sets variables/filters using an object
    * @param variables variable object to set
    * @returns this (chainable)
    */
-  public variables(variables: TVars): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
-    this.queryVars = variables;
+  public variables(variables: Partial<TVars> & any): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+    this.queryVars = { ...this.queryVars, ...variables };
     // @ts-expect-error - dynamic builder props
     return this;
   }
