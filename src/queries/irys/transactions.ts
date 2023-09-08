@@ -11,7 +11,7 @@ export const transactions = {
   },
   tags: [{ name: "", value: "" }],
   address: "",
-  currency: "",
+  token: "",
   signature: "",
   timestamp: 0,
 };
@@ -22,7 +22,7 @@ export type IrysTransactions = typeof transactions;
 export const transactionVars: IrysTransactionVars = {
   ids: undefined,
   after: undefined,
-  currency: undefined,
+  token: undefined,
   from: undefined, // REMAPPED
   pageSize: 100,
   sort: "ASC", // REMAPPED
@@ -35,7 +35,7 @@ export const transactionVars: IrysTransactionVars = {
 export type IrysTransactionVars = {
   ids?: string[];
   after?: string;
-  currency?: string;
+  token?: string;
   from?: string[];
   pageSize?: number;
   sort?: "ASC" | "DESC"; // REMAPPED
@@ -51,7 +51,7 @@ export const irysTransactionsQuery: QueryInfo = {
   enumValues: ["order"],
   vars: transactionVars,
   remapVars: {
-    pageSize: "limit",
+    pageSize: "first",
     sort: "order",
     from: "owners",
     fromTimestamp: (_k, v, vars) => {
