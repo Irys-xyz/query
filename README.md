@@ -1,6 +1,7 @@
 # Irys Query package
+![Irys query package](https://github.com/Bundlr-Network/query/blob/master/assets/query-package-yt-image.png?raw=true)
 
-The Irys query package abstracts GraphQL's complexities, enabling users to query transaction metadata through an intuitive JavaScript interface.
+The Irys enables users to query Irys and Arweave transactions through an intuitive JavaScript interface.
 
 It is easily implemented in a few lines of code.	
 
@@ -18,8 +19,6 @@ and yarn:
 ```console
 yarn add @irys/query
 ```
-
-TODO: Install instructions may change once the package is pushed
 
 ## Imports
 
@@ -58,7 +57,7 @@ Using the Query class users can search:
 - Arweave transactions
 - Arweave blocks
 
-## Documentation
+## Further reading
 
 Consult our [documentation](http://docs.irys.xyz/developer-docs/querying/query-package#imports) for sample code demonstrating each query type. 
 
