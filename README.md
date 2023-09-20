@@ -1,5 +1,7 @@
 # Irys Query package
-![Irys query package](https://github.com/Bundlr-Network/query/blob/master/assets/query-package-yt-image.png?raw=true)
+[![Irys query package](https://github.com/Bundlr-Network/query/blob/master/assets/query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
+
+
 
 The Irys enables users to search Irys and Arweave transactions through an intuitive JavaScript interface.
 
