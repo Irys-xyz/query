@@ -22,7 +22,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   // query string, payload sent to node
   protected _query: string | undefined;
   // url of the node to query
-  protected url: URL;
+  protected gqlURL: URL;
   // misc operational config
   protected config: { first: boolean; userProvided: boolean; numPages: number; numResults: number; retryOpts?: RetryOptions };
   // result tracker object, used to hold state for paging operations
@@ -42,7 +42,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     opts?: SearchOpts;
   }) {
     if (!url) throw new Error("URL is required");
-    this.url = new URL(url);
+    this.gqlURL = new URL(url);
     this.config = {
       first: false,
       userProvided: false,
@@ -55,7 +55,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!query) throw new Error(`Unable to find query with name ${queryName}`);
     this.queryInfo = { ...query };
     this.queryFields = query.query;
-    if (queryName.includes("arweave") && this.url.host === "node1.bundlr.network") this.url = new URL("https://arweave.net/graphql");
+    if (queryName.includes("arweave") && this.gqlURL.host === "node1.bundlr.network") this.gqlURL = new URL("https://arweave.net/graphql");
     if (!opts?.skipVariableSetters) {
       // generate dynamic variable setter builder methods
       for (const k of Object.keys(query.vars)) {
@@ -170,7 +170,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     let res;
     try {
       res = await AsyncRetry(async (_) => {
-        const r = await axios<GQLResponse<TQuery>>(this.url.toString(), {
+        const r = await axios<GQLResponse<TQuery>>(this.gqlURL.toString(), {
           method: "post",
           headers: { "Content-Type": "application/json" },
           data: { query: this._query },
@@ -244,6 +244,17 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    */
   public limit(numResults: number): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.config.numResults = numResults;
+    // @ts-expect-error types
+    return this;
+  }
+
+  /**
+   * Change the URL of the graphql endpoint to use
+   * @param url: URL to use
+   * @returns this (chainable)
+   */
+  public url(url: string | URL): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+    this.gqlURL = new URL(url);
     // @ts-expect-error types
     return this;
   }

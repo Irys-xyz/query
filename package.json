@@ -25,6 +25,16 @@
         "default": "./build/esm/index.js"
       }
     },
+    "./isomorphic/*": {
+      "require": {
+        "types": "./build/cjs/*.d.ts",
+        "default": "./build/cjs/*.js"
+      },
+      "import": {
+        "types": "./build/esm/*.d.ts",
+        "default": "./build/esm/*.js"
+      }
+    },
     ".": {
       "browser": "./build/esm/index.js",
       "require": {
