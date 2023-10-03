@@ -55,7 +55,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!query) throw new Error(`Unable to find query with name ${queryName}`);
     this.queryInfo = { ...query };
     this.queryFields = query.query;
-    if (queryName.includes("arweave") && this.gqlURL.host === "node1.bundlr.network") this.gqlURL = new URL("https://arweave.net/graphql");
+    if (queryName.includes("arweave") && this.gqlURL.host === "node1.irys.xyz") this.gqlURL = new URL("https://arweave.net/graphql");
     if (!opts?.skipVariableSetters) {
       // generate dynamic variable setter builder methods
       for (const k of Object.keys(query.vars)) {
