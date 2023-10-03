@@ -1,10 +1,11 @@
 # Irys Query package
 [![Irys query package](./assets/query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
 
-The Irys query package enables users to search Irys and Arweave transactions through an intuitive JavaScript package.
+The Irys query package enables users to search Irys and Arweave through an intuitive JavaScript package.
 
 It is easily implemented in a few lines of code.	
 
+>The query package is for searching transaction metadata on Irys and Arweave and Arweave block information. Once you've found transactions, use the transaction ID to [download](http://docs.irys.xyz/developer-docs/downloading the associated data.
 
 ## Installation
 
