@@ -1,5 +1,5 @@
 # Irys Query package
-[![Irys query package](./query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
+[![Irys query package](./assets/query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
 
 The Irys query package enables users to search Irys and Arweave transactions through an intuitive JavaScript package.
 
