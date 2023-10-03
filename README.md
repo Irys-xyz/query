@@ -1,9 +1,7 @@
 # Irys Query package
-[![Irys query package](https://github.com/Bundlr-Network/query/blob/master/assets/query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
+[![Irys query package](./query-package-yt-image.png?raw=true)](https://youtu.be/gF0sKKSwxJ8)
 
-
-
-The Irys enables users to search Irys and Arweave transactions through an intuitive JavaScript interface.
+The Irys query package enables users to search Irys and Arweave transactions through an intuitive JavaScript package.
 
 It is easily implemented in a few lines of code.	
 
@@ -24,7 +22,7 @@ yarn add @irys/query
 
 ## Imports
 
-Import the Irys Query package with:
+Import the Irys query package with:
 
 ```js
 import Query from "@irys/query";
@@ -32,13 +30,13 @@ import Query from "@irys/query";
 
 ## Creating a Query object
 
-Start by instantiating a new `Query` object, this is a shared instance you can reuse each time you want to execute a new query.
+Start by instantiating a new `Query` object, this is a shared instance you can reuse each time you want to execute a new query:
 
 ```js
 const myQuery = new Query();
 ```
 
-Then execute a query by chaining together a series of functions that collaboratively narrow down the results returned.
+Then execute a query by chaining together a series of functions that collaboratively narrow down the results returned:
 
 ```js
 const results = await myQuery
