@@ -1,4 +1,4 @@
-import type { QueryInfo } from "src/types";
+import type { QueryInfo } from "../../types";
 import { block } from "./block";
 
 export type ArweaveBlocks = typeof block;

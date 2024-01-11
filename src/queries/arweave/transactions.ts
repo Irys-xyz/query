@@ -1,4 +1,4 @@
-import type { QueryInfo } from "src/types";
+import type { QueryInfo } from "../../types";
 import { transaction } from "./transaction";
 
 export type ArweaveTransactions = typeof transaction;

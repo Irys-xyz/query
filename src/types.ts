@@ -76,7 +76,7 @@ export type Field<T extends Record<string, any>> = {
 
 // constructs function signatures from a type for dynamic builder methods
 export type BuilderMethods<T extends Record<string, any>, R = any> = {
-  [K in keyof T]-?: T[K] extends object ? BuilderMethods<T[K]> : (field: T[K]) =>  BuilderMethods<T, R>;
+  [K in keyof T]-?: T[K] extends object ? BuilderMethods<T[K]> : (field: T[K]) => BuilderMethods<T, R>;
 } & R;
 
 // maps an array back to the type of it's element

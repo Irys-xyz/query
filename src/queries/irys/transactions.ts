@@ -1,4 +1,4 @@
-import type { QueryInfo } from "src/types";
+import type { QueryInfo } from "../../types";
 
 // derive type from minimal object, use this object to validate structure in code.
 export const transactions = {
