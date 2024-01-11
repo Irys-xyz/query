@@ -55,11 +55,15 @@ export const irysTransactionsQuery: QueryInfo = {
     sort: "order",
     from: "owners",
     fromTimestamp: (_k, v, vars) => {
-      vars.timestamp = { ...vars.timestamp, from: new Date(v).getTime() };
+      const ts = new Date(v).getTime();
+      if (isNaN(ts)) throw new Error("invalid from timestamp");
+      vars.timestamp = { ...vars.timestamp, from: ts };
       vars.fromTimestamp = undefined;
     },
     toTimestamp: (_k, v, vars) => {
-      vars.timestamp = { ...vars.timestamp, to: new Date(v).getTime() };
+      const ts = new Date(v).getTime();
+      if (isNaN(ts)) throw new Error("invalid to timestamp");
+      vars.timestamp = { ...vars.timestamp, to: ts };
       vars.toTimestamp = undefined;
     },
   },

@@ -359,8 +359,8 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Builds the current query and returns a ready to POST query string
    * @returns string form of the current query
    */
-  public async toQuery(): Promise<string> {
-    await this.buildQuery();
+  public toQuery(): string {
+    this.buildQuery();
     return this._query!;
   }
 
