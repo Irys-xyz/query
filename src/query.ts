@@ -10,9 +10,7 @@ import type { BuilderMethods, QueryCtorOpts, SearchOpts } from "./types";
 export class Query {
   protected opts: QueryCtorOpts;
 
-  constructor(opts: QueryCtorOpts = { url: new URL("https://node1.irys.xyz/graphql") }) {
-    if (!opts.url) throw new Error("URL is required");
-    opts.url = new URL(opts.url);
+  constructor(opts: QueryCtorOpts = { network: "mainnet" }) {
     this.opts = opts;
   }
 
