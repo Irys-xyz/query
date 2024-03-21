@@ -48,5 +48,6 @@ export const arweaveBlocksQuery: QueryInfo = {
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",
+    limiterName: "pageSize",
   },
 };

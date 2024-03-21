@@ -101,6 +101,9 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
 
     // incorporates defaults from queryInfo
     const vars = { ...this.queryInfo.vars, ...this.queryVars };
+    if (this.config.numResults && this.queryInfo.paging?.limiterName) {
+      vars[this.queryInfo.paging?.limiterName] = Math.max(this.config.numResults, 1);
+    }
     // remap keys - primarily done to prevent conflicts with builder methods.
     // {limit: "first"} -> remaps `limit` variable to `first` variable
     // {limit: (k,v) => ["first",v]} does the same thing

@@ -55,5 +55,6 @@ export const arweaveTransactionsQuery: QueryInfo = {
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",
+    limiterName: "pageSize",
   },
 };

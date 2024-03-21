@@ -70,5 +70,6 @@ export const irysTransactionsQuery: QueryInfo = {
   paging: {
     hasNextPage: "hasNextPage",
     cursor: "cursor",
+    limiterName: "pageSize",
   },
 };

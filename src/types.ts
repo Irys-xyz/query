@@ -35,6 +35,8 @@ export type QueryInfo = {
     hasNextPage: string;
     /** name of the cursor edge var*/
     cursor: string;
+    /** name of the limiter */
+    limiterName: string;
   };
 };
 
