@@ -44,14 +44,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     queryName: string;
     opts?: SearchOpts;
   }) {
-    switch (network) {
-      case "mainnet":
-        url = "https://arweave.mainnet.irys.xyz/graphql";
-        break;
-      case "devnet":
-        url = "https://arweave.devnet.irys.xyz/graphql";
-        break;
-    }
+    url = network ? this.parseNetwork(network) : url;
     if (!url) throw new Error("URL or network is required");
     this.gqlURL = new URL(url);
     this.config = {
@@ -81,6 +74,18 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     }
 
     return this;
+  }
+
+  protected parseNetwork(network: Network | undefined): URL | undefined {
+    switch (network) {
+      case "mainnet":
+        return new URL("https://arweave.mainnet.irys.xyz/graphql");
+      case "devnet":
+        return new URL("https://arweave.devnet.irys.xyz/graphql");
+      default:
+        return undefined;
+    }
+    return undefined;
   }
 
   /**
@@ -268,6 +273,19 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    */
   public url(url: string | URL): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.gqlURL = new URL(url);
+    // @ts-expect-error types
+    return this;
+  }
+
+  /**
+   * Change the network of the graphql endpoint to use
+   * @param network: network to use
+   * @returns this (chainable)
+   */
+  public network(network: Network | undefined): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+    const parsed = this.parseNetwork(network);
+    if (!parsed) throw new Error(`Invalid network: ${network}`);
+    this.gqlURL = parsed;
     // @ts-expect-error types
     return this;
   }
