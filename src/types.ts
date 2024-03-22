@@ -39,12 +39,24 @@ export type QueryInfo = {
     limiterName: string;
   };
 };
+export type Network = "mainnet" | "devnet";
 
 export type SearchOpts = { skipVariableSetters?: boolean; query?: QueryInfo | false };
-export type QueryCtorOpts = { url: URL | string; retryConfig?: RetryOptions };
+export type QueryCtorOpts = { url?: URL | string; network?: Network; retryConfig?: RetryOptions };
 
 // forces full type resolution, aka "intellisense pretty printing"
 export type Pretty<T> = T extends (...args: any[]) => any ? T : T extends abstract new (...args: any[]) => any ? T : { [K in keyof T]: T[K] };
+
+// https://twitter.com/mattpocockuk/status/1622730173446557697?s=20
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
+
+export type Prettify2<T> = {
+  [K in keyof T]: Prettify<T[K]>;
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 // custom types
 // F is possible fields, S is user selection

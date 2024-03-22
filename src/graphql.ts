@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Readable } from "stream";
-import type { ArrayElement, BuilderMethods, Field, GQLResponse, QueryInfo, ReturnFields, SearchOpts } from "./types";
+import type { ArrayElement, BuilderMethods, Field, GQLResponse, Network, QueryInfo, ReturnFields, SearchOpts } from "./types";
 import type { Options as RetryOptions } from "async-retry";
 import AsyncRetry from "async-retry";
 
@@ -11,6 +11,7 @@ import AsyncRetry from "async-retry";
 /**
  * GraphQL query class - encapsulates all logic, types, and methods required to resolve queries
  */
+
 export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends Record<string, any> = any, TReturn extends Record<string, any> = any> {
   /* implements BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> */
   // query variables
@@ -30,18 +31,21 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
 
   constructor({
     url,
+    network,
     retryConfig,
     query,
     queryName,
     opts,
   }: {
-    url: string | URL;
+    url?: string | URL;
+    network?: Network;
     retryConfig?: RetryOptions;
     query?: QueryInfo | false;
     queryName: string;
     opts?: SearchOpts;
   }) {
-    if (!url) throw new Error("URL is required");
+    url = network ? this.parseNetwork(network) : url;
+    if (!url) throw new Error("URL or network is required");
     this.gqlURL = new URL(url);
     this.config = {
       first: false,
@@ -55,7 +59,6 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     if (!query) throw new Error(`Unable to find query with name ${queryName}`);
     this.queryInfo = { ...query };
     this.queryFields = query.query;
-    if (queryName.includes("arweave") && this.gqlURL.host === "node1.irys.xyz") this.gqlURL = new URL("https://arweave.net/graphql");
     if (!opts?.skipVariableSetters) {
       // generate dynamic variable setter builder methods
       for (const k of Object.keys(query.vars)) {
@@ -71,6 +74,18 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
     }
 
     return this;
+  }
+
+  protected parseNetwork(network: Network | undefined): URL | undefined {
+    switch (network) {
+      case "mainnet":
+        return new URL("https://arweave.mainnet.irys.xyz/graphql");
+      case "devnet":
+        return new URL("https://arweave.devnet.irys.xyz/graphql");
+      default:
+        return undefined;
+    }
+    return undefined;
   }
 
   /**
@@ -258,6 +273,19 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    */
   public url(url: string | URL): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
     this.gqlURL = new URL(url);
+    // @ts-expect-error types
+    return this;
+  }
+
+  /**
+   * Change the network of the graphql endpoint to use
+   * @param network: network to use
+   * @returns this (chainable)
+   */
+  public network(network: Network | undefined): BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> {
+    const parsed = this.parseNetwork(network);
+    if (!parsed) throw new Error(`Invalid network: ${network}`);
+    this.gqlURL = parsed;
     // @ts-expect-error types
     return this;
   }
