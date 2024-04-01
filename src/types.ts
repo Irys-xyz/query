@@ -39,7 +39,7 @@ export type QueryInfo = {
     limiterName: string;
   };
 };
-export type Network = "mainnet" | "devnet";
+export type Network = "mainnet" | "devnet" | string;
 
 export type SearchOpts = { skipVariableSetters?: boolean; query?: QueryInfo | false };
 export type QueryCtorOpts = { url?: URL | string; network?: Network; retryConfig?: RetryOptions };
