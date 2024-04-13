@@ -82,6 +82,8 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
         return new URL("https://arweave.mainnet.irys.xyz/graphql");
       case "devnet":
         return new URL("https://arweave.devnet.irys.xyz/graphql");
+      case "arweave":
+        return new URL("https://arweave.net/graphql");
       default:
         return undefined;
     }
