@@ -2,6 +2,7 @@ import { GraphQLQuery } from "./graphql";
 import { queries } from "./queries";
 import type { ArweaveBlocks, ArweaveBlocksVars } from "./queries/arweave/blocks";
 import type { ArweaveTransactions, ArweaveTransactionsVars } from "./queries/arweave/transactions";
+import type { IrysPaymentApprovalVars, IrysPaymentApprovals } from "./queries/irys/approvals";
 import type { IrysTransactionVars, IrysTransactions } from "./queries/irys/transactions";
 import type { BuilderMethods, QueryCtorOpts, SearchOpts } from "./types";
 // import type { ArweaveBlock, ArweaveBlockVars } from "./queries/arweave/block";
@@ -29,6 +30,11 @@ export class Query {
     queryName: "irys:transactions",
     opts?: SearchOpts,
   ): BuilderMethods<IrysTransactionVars, GraphQLQuery<IrysTransactions, IrysTransactionVars, IrysTransactions[]>>;
+
+  search(
+    queryName: "irys:paymentApprovals",
+    opts?: SearchOpts,
+  ): BuilderMethods<IrysPaymentApprovalVars, GraphQLQuery<IrysPaymentApprovals, IrysPaymentApprovalVars, IrysPaymentApprovals[]>>;
 
   search(
     queryName: "arweave:transactions",
