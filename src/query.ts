@@ -2,7 +2,7 @@ import { GraphQLQuery } from "./graphql";
 import { queries } from "./queries";
 import type { ArweaveBlocks, ArweaveBlocksVars } from "./queries/arweave/blocks";
 import type { ArweaveTransactions, ArweaveTransactionsVars } from "./queries/arweave/transactions";
-import type { IrysPaymentApprovalVars, IrysPaymentApprovals } from "./queries/irys/approvals";
+import type { IrysPaymentApprovalVars, IrysPaymentApprovals } from "./queries/irys/paymentApprovals";
 import type { IrysTransactionVars, IrysTransactions } from "./queries/irys/transactions";
 import type { BuilderMethods, QueryCtorOpts, SearchOpts } from "./types";
 // import type { ArweaveBlock, ArweaveBlockVars } from "./queries/arweave/block";

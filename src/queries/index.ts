@@ -1,7 +1,7 @@
 import type { QueryInfo } from "../types";
 import { arweaveBlocksQuery } from "./arweave/blocks";
 import { arweaveTransactionsQuery } from "./arweave/transactions";
-import { irysPaymentApprovalsQuery } from "./irys/approvals";
+import { irysPaymentApprovalsQuery } from "./irys/paymentApprovals";
 import { irysTransactionsQuery } from "./irys/transactions";
 // import { arweaveTransactionQuery } from "./arweave/transaction";
 // import { arweaveBlockQuery } from "./arweave/block";
