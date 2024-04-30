@@ -3,8 +3,8 @@ import type { QueryInfo } from "../../types";
 // derive type from minimal object, use this object to validate structure in code.
 export const paymentApprovals = {
   amount: "",
-  creator: "",
-  receiver: "",
+  payingAddress: "",
+  approvedAddress: "",
   expiresBy: 0,
   timestamp: 0,
   token: "",
@@ -14,18 +14,18 @@ export type IrysPaymentApprovals = typeof paymentApprovals;
 
 // default variables
 export const paymentApprovalVars: IrysPaymentApprovalVars = {
-  token: undefined,
-  creator: undefined,
-  receiver: undefined,
+  tokens: undefined,
+  payingAddresses: undefined,
+  approvedAddresses: undefined,
   pageSize: 100,
   order: "ASC",
   after: undefined,
 };
 
 export type IrysPaymentApprovalVars = {
-  token?: string[];
-  creator?: string[];
-  receiver?: string[];
+  tokens?: string[];
+  payingAddresses?: string[];
+  approvedAddresses?: string[];
   pageSize?: number;
   order?: "ASC" | "DESC";
   after?: string;

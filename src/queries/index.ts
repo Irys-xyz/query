@@ -15,3 +15,8 @@ export const queries: Record<string, QueryInfo> = {
   // "arweave:transaction": arweaveTransactionQuery,
   // "arweave:block": arweaveBlockQuery,
 };
+
+export * from "./arweave/blocks";
+export * from "./arweave/transactions";
+export * from "./irys/transactions";
+export * from "./irys/paymentApprovals";

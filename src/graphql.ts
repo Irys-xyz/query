@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Readable } from "stream";
-import type { ArrayElement, BuilderMethods, Field, GQLResponse, Network, QueryInfo, ReturnFields, SearchOpts } from "./types";
+// this is so the inferred types are portable
+import type { ArrayElement, BuilderMethods, Field, GQLResponse, Network, QueryInfo, ReturnFields, SearchOpts } from ".";
 import type { Options as RetryOptions } from "async-retry";
 import AsyncRetry from "async-retry";
 
