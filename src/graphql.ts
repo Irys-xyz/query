@@ -16,19 +16,19 @@ import AsyncRetry from "async-retry";
 export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends Record<string, any> = any, TReturn extends Record<string, any> = any> {
   /* implements BuilderMethods<TVars, GraphQLQuery<TQuery, TVars, TReturn>> */
   // query variables
-  protected queryVars: Record<string, any> = {};
+  public queryVars: Record<string, any> = {};
   // query fields
-  protected queryFields: Record<string, any>;
+  public queryFields: Record<string, any>;
   // query metadata
-  protected queryInfo: QueryInfo & { name: string };
+  public queryInfo: QueryInfo & { name: string };
   // query string, payload sent to node
-  protected _query: string | undefined;
+  public _query: string | undefined;
   // url of the node to query
-  protected gqlURL: URL;
+  public gqlURL: URL;
   // misc operational config
-  protected config: { first: boolean; userProvided: boolean; numPages: number; numResults: number; retryOpts?: RetryOptions };
+  public config: { first: boolean; userProvided: boolean; numPages: number; numResults: number; retryOpts?: RetryOptions };
   // result tracker object, used to hold state for paging operations
-  protected resultTracker: { numResults: number; numPages: number; done: boolean } = { numPages: 0, numResults: 0, done: false };
+  public resultTracker: { numResults: number; numPages: number; done: boolean } = { numPages: 0, numResults: 0, done: false };
 
   constructor({
     url,
@@ -299,7 +299,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
    * Gets all results from the built query
    * @returns array of results
    */
-  protected async all(): Promise<TReturn> {
+  public async all(): Promise<TReturn> {
     const results: any[] = [];
     do {
       const page = await this.getPage();
@@ -314,7 +314,7 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   /**
    * Async generator, yields individual query result items
    */
-  protected async *generator(): AsyncGenerator<Required<ArrayElement<TReturn>>> {
+  public async *generator(): AsyncGenerator<Required<ArrayElement<TReturn>>> {
     do {
       const res = await this.getPage();
       if (!res) return;

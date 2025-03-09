@@ -1,6 +1,6 @@
 {
   "name": "@irys/query",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Irys query package",
   "repository": "https://github.com/Irys-xyz/query",
   "author": "JesseTheRobot <jesse@irys.xyz>",
@@ -46,7 +46,7 @@
         "default": "./build/esm/index.js"
       }
     },
-    "./*": {
+    "./any/*": {
       "types": "./*.d.ts",
       "default": "./*.js"
     }
