@@ -1,6 +1,6 @@
 {
   "name": "@irys/query",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Irys query package",
   "repository": "https://github.com/Irys-xyz/query",
   "author": "JesseTheRobot <jesse@irys.xyz>",
