@@ -324,6 +324,18 @@ export class GraphQLQuery<TQuery extends Record<any, any> = any, TVars extends R
   }
 
   /**
+   * Async generator, yields pages of results
+   */
+  public async *pageGenerator(): AsyncGenerator<Required<TReturn>> {
+    do {
+      const res = await this.getPage();
+      if (!res) return;
+      // @ts-expect-error constraints
+      yield res;
+    } while (this.queryVars.after); // getPage sets after to undefined if there are no more pages
+  }
+
+  /**
    * Readable stream produced from `this.generator`
    * @returns a readable instance, with the "data" event yielding individual results
    */
